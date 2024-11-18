@@ -1,11 +1,77 @@
-class Person {
+class Product {
+    private String productID;
+    private String name;
+    private double price;
+    private int stock;
+    
+    public Product() {
+        this.productID = "";
+        this.name = "";
+        this.price = 0.0;
+        this.stock = 0;
+    }
+    
+    
+    public void updateStock(int stock) {
+        this.stock = stock;
+    }
+    
+    public void displayProduct() {
+        System.out.println("ID: " + productID + " | Name: " + name + " | Price: $" + price + " | Stock: " + stock);
+    }
+
+    public String getProductID() {
+        return productID; 
+    }
+    
+    public String getName() {
+        return name; 
+    }
+    public double getPrice() {
+        return price; 
+    }
+    public int getStock() {
+        return stock; 
+    }
+    
+}
+
+class Catalogue {
+    private List<Product> products = new ArrayList<>();
+
+    public void addProduct(Product product) {
+        products.add(product);
+    }
+
+    public void viewCatalogue() {
+        if (products.isEmpty()) {
+            System.out.println("No products available.");
+            return;
+        }
+        System.out.println("\nCatalogue:");
+        for (Product product : products) {
+            product.displayProduct();
+        }
+    }
+
+    public Product getProductByID(String productID) {
+        for (Product product : products) {
+            if (product.getProductID().equals(productID)) {
+                return product;
+            }
+        }
+        return null;
+    }
+}
+
+class User {
     
     private String name;
     private String email;
     private String address;
     private String phoneNumber;
 
-    public Person() {
+    public User() {
         this.name = "";
         this.email = "";
         this.address = "";
@@ -46,48 +112,4 @@ class Person {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-}
-
-class Product {
-    private String productID;
-    private String name;
-    private double price;
-    private String description;
-    private int stock;
-    
-    public Product() {
-        this.productID = "";
-        this.name = "";
-        this.price = 0.0;
-        this.description = "";
-        this.stock = 0;
-    }
-    
-    public void updateProduct(String name, double price, String description) {
-        this.name = name;
-        this.price = price;
-        this.description = description;
-    }
-    
-    public void updateStock(int quantity) {
-        this.stock -= quantity;
-    }
-
-    public String getProductID() {
-        return productID; 
-    }
-    
-    public String getName() {
-        return name; 
-    }
-    public double getPrice() {
-        return price; 
-    }
-    public String getDescription() { 
-        return description;
-    }
-    public int getStock() {
-        return stock; 
-    }
-    
 }
