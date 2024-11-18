@@ -41,7 +41,53 @@ class Person {
         return phoneNumber;
     }
 
+
+
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+}
+
+class Product {
+    private String productID;
+    private String name;
+    private double price;
+    private String description;
+    private int stock;
+    
+    public Product() {
+        this.productID = "";
+        this.name = "";
+        this.price = 0.0;
+        this.description = "";
+        this.stock = 0;
+    }
+    
+    public void updateProduct(String name, double price, String description) {
+        this.name = name;
+        this.price = price;
+        this.description = description;
+    }
+    
+    public void updateStock(int quantity) {
+        this.stock -= quantity;
+    }
+
+    public String getProductID() {
+        return productID; 
+    }
+    
+    public String getName() {
+        return name; 
+    }
+    public double getPrice() {
+        return price; 
+    }
+    public String getDescription() { 
+        return description;
+    }
+    public int getStock() {
+        return stock; 
+    }
+    
 }
