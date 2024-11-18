@@ -1,0 +1,214 @@
+//Implement Array list here
+
+public class Main {
+    public static void main(String[] args) {
+        Seller seller1 = new Seller();
+        seller1.updateCatalogue();
+        seller1.displayCatalogue();
+
+        Customer customer1 = new Customer();
+
+        customer1.viewCatalogue();
+
+    }
+}
+
+public abstract class User {
+    String name;
+    String email;
+    String address;
+    String phoneNumber;
+
+    static Catalogue catalogue = new Catalogue();
+
+
+}
+
+public class Customer extends User{
+
+
+    Order order1 = new Order();
+    Order order2 = new Order();
+
+    Order [] orderList = {order1, order2};
+
+    ShoppingCart shoppingCart = new ShoppingCart(orderList);
+
+
+    void viewCatalogue(){
+        System.out.println("CUSTOMER VIEW");
+        catalogue.viewCatalogue();
+
+    }
+}
+
+public class Seller extends User {
+    int sellerId;
+    String businessName;
+
+    Product product1 = new Product(1, "Mouse", 500, 10, "It's a great mouse");
+    Product product2 = new Product(2, "Keyboard", 1000, 10, "It's a great keyboard");
+    Product product3 = new Product(3, "Monitor", 1500, 5, "It's a great monitor");
+
+    Product[] productList = {product1, product2, product3};
+
+    /*Methods to add:
+    addProduct()
+    removeProduct();
+    editProduct();
+
+
+  */
+
+    void updateCatalogue () {
+        catalogue.addProduct(productList);
+
+    }
+
+   void displayCatalogue(){
+        System.out.println("SELLER VIEW");
+        catalogue.viewCatalogue();
+
+   }
+
+}
+
+public class Catalogue {
+    Product [] productList;
+    // Implement this private List<Product> products = new ArrayList<>();
+
+    void addProduct(Product [] productList){
+        this.productList = productList;
+    }
+
+
+    void viewCatalogue(){
+        /*if (products.isEmpty()) {
+            System.out.println("No products available.");
+            return;
+        }*/
+
+        for(Product x : productList){
+            x.displayProduct();
+
+        }
+
+        /*
+        public Product getProductByID(String productID) {
+            for (Product product : products) {
+                if (product.getProductID().equals(productID)) {
+                    return product;
+                }
+            }
+            return null;
+        }*/
+    }
+
+
+
+}
+
+public class Product {
+
+    private int productID;
+    private String productName;
+    private double productPrice;
+    private int stockNum;
+    String productDescription;
+
+    Product(int productID, String productName,  double productPrice, int stockNum, String productDescription){
+        this.productID = productID;
+        this.productName = productName;
+        this.productPrice = productPrice;
+        this.stockNum = stockNum;
+        this.productDescription = productDescription;
+
+    }
+
+
+    void displayProduct(){
+        System.out.println("PRODUCT");
+        System.out.println("Name: " + productName);
+        System.out.println("Price: " + productPrice);
+        System.out.println("Description: " + productDescription + "\n");
+
+    };
+
+
+
+    public void updateStock(int stockNum) {
+        this.stockNum = stockNum;
+    }
+
+    public int getProductID() {
+        return productID;
+    }
+
+    public void setProductID() {
+        //Complete this
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName() {
+        //Complete this
+    }
+
+
+    public double getProductPrice() {
+        return productPrice;
+    }
+
+    public void setProductPrice() {
+        //Complete this
+    }
+
+
+    public int getStock() {
+        return stockNum;
+    }
+
+
+
+}
+
+
+public class ShoppingCart {
+  //Complete this
+
+    Order [] orderList;
+
+    ShoppingCart(Order [] orderList){
+        this.orderList = orderList;
+
+    }
+
+    //Process order list through Shopping cart class
+
+/*Method to add
+  +addCartItem() +removeCartItem()
+  +updateQuantity()
+  +viewCart() +checkOut()
+*/
+
+}
+
+public class Order extends OrderDetails {
+  //Complete this
+
+}
+
+
+public abstract class OrderDetails {
+//Complete this
+    int orderId;
+
+
+}
+
+public class Payment{
+  //Complete this
+
+}
