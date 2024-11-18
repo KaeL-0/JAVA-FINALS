@@ -118,6 +118,15 @@ class Catalogue {
             product.displayProduct();
         }
     }
+
+    public Product getProductByID(String productID) {
+        for (Product product : products) {
+            if (product.getProductID().equals(productID)) {
+                return product;
+            }
+        }
+        return null;
+    }
 }
 
 public class Product {
