@@ -238,18 +238,108 @@ public class ShoppingCart {
 
 }
 
-public class Order extends OrderDetails {
-  //Complete this
-
-}
-
-
 public abstract class OrderDetails {
-//Complete this
-    int orderId;
+    protected int orderId;
+    protected int productId;
+    protected String productName;
+    protected int quantity;         // added this, for subtotal calculation.
+    protected double subTotal;
+    protected double shippingFee;
 
-
+    public abstract double calcPrice();
 }
+
+
+class Order extends OrderDetails {
+    private int customerID;
+    private int sellerID;
+    private String dateCreated;
+    private String dateShipped;
+    private String status;
+
+    public Order(int orderId, int productId, String productName, String dateCreated, String dateShipped) {
+        this.orderId = orderId;
+        this.productId = productId;
+        this.productName = productName;
+        this.quantity = 0;
+        this.subTotal = 0.0;
+        this.shippingFee = 0.0;
+        this.dateCreated = dateCreated;
+        this.dateShipped = dateShipped;
+        this.status = "Pending"; 
+    }
+
+
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(String dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public double calcPrice() {
+        Product product = catalogue.getProductByID(productId); 
+        if (product != null) {
+            return product.getProductPrice() * quantity;
+        } else {
+            System.out.println("Product with ID " + productId + " not found.");
+            return 0;
+        }
+    }
+
+    public void updateStatus(String newStatus) {
+        if (newStatus == null){
+            System.out.println("Invalid status provided!");
+            return;
+        }
+        else{
+            this.status = newStatus;
+            System.out.println("Order ID " + orderId + " status updated to: " + newStatus);
+        }
+    }
+}
+
 
 public class Payment{
     //Complete this //Got you -Johann
