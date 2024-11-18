@@ -25,7 +25,19 @@ public abstract class User {
 }
 
 public class Customer extends User{
+    private int customerID;
+    
+    Customer(){
+        this.customerID = 0;
+    }
+    
+    public int getCustomerID() {
+        return customerID;
+    }
 
+    public void setCustomerID(int customerID) {
+        this.customerID = customerID;
+    }
 
     Order order1 = new Order();
     Order order2 = new Order();
