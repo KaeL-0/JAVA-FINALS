@@ -80,39 +80,32 @@ class Seller extends User {
     }
 }
 
-public class Catalogue {
-    Product [] productList;
-    // Implement this private List<Product> products = new ArrayList<>();
+class Catalogue {
+    private List<Product> products = new ArrayList<>();
 
-    void addProduct(Product [] productList){
-        this.productList = productList;
+    void addProduct(Product[] productList) {
+        for (Product product : productList) {
+            products.add(product);
+        }
     }
 
+    void addProduct(Product product) {
+        products.add(product);
+    }
 
-    void viewCatalogue(){
-        /*if (products.isEmpty()) {
+    void removeProduct(Product product) {
+        products.remove(product);
+    }
+
+    void viewCatalogue() {
+        if (products.isEmpty()) {
             System.out.println("No products available.");
             return;
-        }*/
-
-        for(Product x : productList){
-            x.displayProduct();
-
         }
-
-        /*
-        public Product getProductByID(String productID) {
-            for (Product product : products) {
-                if (product.getProductID().equals(productID)) {
-                    return product;
-                }
-            }
-            return null;
-        }*/
+        for (Product product : products) {
+            product.displayProduct();
+        }
     }
-
-
-
 }
 
 public class Product {
