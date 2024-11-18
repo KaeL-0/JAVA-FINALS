@@ -126,13 +126,14 @@ public class Product {
     }
 
 
-    void displayProduct(){
+    void displayProduct() {
         System.out.println("PRODUCT");
+        System.out.println("ID: " + productID);
         System.out.println("Name: " + productName);
         System.out.println("Price: " + productPrice);
+        System.out.println("Stock: " + stockNum);
         System.out.println("Description: " + productDescription + "\n");
-
-    };
+    }
 
 
 
@@ -144,16 +145,16 @@ public class Product {
         return productID;
     }
 
-    public void setProductID() {
-        //Complete this
+    public void setProductID(int productID) {
+        this.productID = productID;
     }
 
     public String getProductName() {
         return productName;
     }
 
-    public void setProductName() {
-        //Complete this
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
 
@@ -161,8 +162,8 @@ public class Product {
         return productPrice;
     }
 
-    public void setProductPrice() {
-        //Complete this
+    public void setProductPrice(double productPrice) {
+        this.productPrice = productPrice;
     }
 
 
