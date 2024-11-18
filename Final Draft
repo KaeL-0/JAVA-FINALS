@@ -42,7 +42,7 @@ public class Customer extends User{
     }
 }
 
-public class Seller extends User {
+class Seller extends User {
     int sellerId;
     String businessName;
 
@@ -52,25 +52,32 @@ public class Seller extends User {
 
     Product[] productList = {product1, product2, product3};
 
-    /*Methods to add:
-    addProduct()
-    removeProduct();
-    editProduct();
-
-
-  */
-
-    void updateCatalogue () {
-        catalogue.addProduct(productList);
-
+    public void addProduct(Product product) {
+        catalogue.addProduct(product);
+        System.out.println(product.getProductName() + " has been added to the catalogue.");
     }
 
-   void displayCatalogue(){
+    public void removeProduct(Product product) {
+        catalogue.removeProduct(product);
+        System.out.println(product.getProductName() + " has been removed from the catalogue.");
+    }
+
+    public void editProduct(Product product, String newName, double newPrice, String newDescription) {
+
+        product.setProductName(newName);
+        product.setProductPrice(newPrice);
+        product.productDescription = newDescription;
+        System.out.println(product.getProductName() + " has been updated.");
+    }
+
+    void updateCatalogue() {
+        catalogue.addProduct(productList);
+    }
+
+    void displayCatalogue() {
         System.out.println("SELLER VIEW");
         catalogue.viewCatalogue();
-
-   }
-
+    }
 }
 
 public class Catalogue {
