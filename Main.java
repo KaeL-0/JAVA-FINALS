@@ -57,6 +57,8 @@ public class Main {
         //- See program to understand logic or tanong niyo nalang ako HAHA
         //- Pa add nalang nung ibang methods and papolish nalang nung code if kailangan pero all goods na naman yung mga class methods, gamitin niyo nalang
 
+      
+
 
 
 
