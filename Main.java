@@ -55,7 +55,7 @@ public class Main {
         //4. Add way to decrease stock if product has been placed to order and is checkedout
 
         //- See program to understand logic or tanong niyo nalang ako HAHA
-        //- Add methods and polish niyo nalang yung code if kailangan pero okay na naman yung mga methods
+        //- Pa add nalang nung ibang methods and papolish nalang nung code if kailangan pero all goods na naman yung mga class methods, gamitin niyo nalang
 
 
 
