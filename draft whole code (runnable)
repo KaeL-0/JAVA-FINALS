@@ -1,0 +1,903 @@
+/*
+ - no clear screens yet
+- spacing needs fixing
+- more designs
+- needs to stop prompting for user info if they already filled-out once (pag nag choose role ulit kasi magpprompt ulit siya) (fixed)
+- email and password being shared by the customer and seller (not sure about this one tbh, siguro instead na may option to go back sa role selection is maglogout na lang altogether) (fixed)
+- 'di pa talaga maayos, pina-run ko lang muna para makuha yung flow ng program and macheck if working yung logic. check niyo na lang din.
+ */
+
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+
+abstract class User {
+    String name;
+    String email;
+    String password;
+    String address;
+    String phoneNumber;
+    static Catalogue catalogue = new Catalogue();
+    //Created static so catalogue will be shared among the seller and customer users
+
+    public void displayAccount() {
+        System.out.println("\nACCOUNT INFORMATION");
+        System.out.println("Name: " + name);
+        System.out.println("Email: " + email);
+        System.out.println("Address: " + address);
+        System.out.println("Phone Number: " + phoneNumber);
+        System.out.println("Password: " + password);
+    }
+
+    public void updateAccountInfo() {
+        Scanner input = new Scanner(System.in);
+
+        System.out.print("Enter new name: ");
+        this.name = input.nextLine();
+
+        System.out.print("Enter new email: ");
+        this.email = input.nextLine();
+
+        System.out.print("Enter new address: ");
+        this.address = input.nextLine();
+
+        System.out.print("Enter new phone number: ");
+        this.phoneNumber = input.nextLine();
+
+        System.out.print("Enter new password: ");
+        this.password = input.nextLine();
+
+        System.out.println("\n[Account updated successfully!]");
+    }
+}
+
+
+class Customer extends User  {
+    Scanner input = new Scanner(System.in);
+
+    private ArrayList <Order> orderList;
+    private Product product;
+    private Order order;
+    private ShoppingCart shoppingCart;
+    private int orderID;
+    private int checkproductID = 1;
+
+
+
+    Customer() {
+        product = null;
+        order = null;
+        orderID = 0;
+        shoppingCart = new ShoppingCart();
+        orderList = new ArrayList<>();
+
+    }
+
+
+
+    //For customer to place order with the catalogue as reference
+    public void placeOrder(){
+        //Displays the catalogue
+        catalogue.viewCatalogue();
+
+        System.out.println("[Enter 0 to exit]\n");
+
+        //Prompt to place an order
+        System.out.println("PLACE ORDER");
+
+
+        //Continues until 0 is entered for exit
+        while(checkproductID != 0) {
+            System.out.print("Enter product ID: ");
+            checkproductID = input.nextInt();
+            input.nextLine();
+
+
+            //Checks if the product exists in the catalogue
+            if (catalogue.checkCatalogue(checkproductID)) {
+
+                //If product exist, return the product,
+                product = catalogue.returnProduct(checkproductID);
+
+                //set as order,
+                orderID++;
+                order = new Order(product, orderID);
+
+                //add order to order list,
+                orderList.add(order);
+
+                //then transfer order list to shopping cart for processing
+                shoppingCart.addCartItem(orderList);
+                System.out.println("[Item added to cart]\n");
+
+
+            } else if (checkproductID == 0){
+                System.out.println("[Catalogue exited]");
+
+            } else {
+
+                System.out.println("[Product does not exist]\n");
+            }
+        }
+    }
+
+    public void customerMenu() {
+        boolean exitCustomerMenu = false;
+
+        while (!exitCustomerMenu) {
+            System.out.println("\n===== CUSTOMER MENU =====");
+            System.out.println("1. View Shopping Cart");
+            System.out.println("2. Place Order");
+            System.out.println("3. Display Account");
+            System.out.println("4. Update Account Info");
+            System.out.println("5. Logout");
+            System.out.println("6. Exit");
+            System.out.print("Enter choice: ");
+
+            try {
+                int choice = input.nextInt();
+
+                switch (choice) {
+                    case 1:
+                        viewShoppingCart();
+                        break;
+                    case 2:
+                        placeOrder();
+                        break;
+                    case 3:
+                        displayAccount();
+                        break;
+                    case 4:
+                        updateAccountInfo();
+                        break;
+                    case 5:
+                        exitCustomerMenu = true;
+                        break;
+                    case 6:
+                        System.exit(0);
+                    default:
+                        System.out.println("[Invalid choice, please try again.]");
+                }
+            } catch (Exception e) {
+                System.out.println("[Invalid input. Please enter a valid number.]");
+            }
+        }
+    }
+
+    //Displays shopping cart
+    public void viewShoppingCart() {
+        boolean exitCartMenu = false;
+
+        while (!exitCartMenu) {
+            System.out.println("\n===== SHOPPING CART MENU =====");
+            System.out.println("1. View Cart");
+            System.out.println("2. Remove Cart Item");
+            System.out.println("3. Checkout");
+            System.out.println("4. Back to Customer Menu");
+            System.out.print("Enter choice: ");
+
+            try {
+                int choice = input.nextInt();
+
+                switch (choice) {
+                    case 1:
+                        shoppingCart.viewCart();
+                        break;
+                    case 2:
+                        shoppingCart.removeCartItem();
+                        break;
+                    case 3:
+                        shoppingCart.checkOut();
+                        break;
+                    case 4:
+                        exitCartMenu = true;
+                        break;
+                    default:
+                        System.out.println("Invalid choice, please try again.");
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter a number.");
+            }
+        }
+    }
+
+    //Manually display catalogue
+    public void viewCatalogue(){
+        catalogue.viewCatalogue();
+
+    }
+
+    public ShoppingCart getShoppingCart(){
+        return shoppingCart;
+    }
+}
+
+class Seller extends User  {
+
+    Scanner input = new Scanner(System.in);
+
+    private ArrayList <Product> productList = new ArrayList<>();
+    private Product product = null;
+    private int productID = 0;
+
+
+    //For seller to add product to the catalogue
+    public void addProduct(){
+
+        //Create new product and increment product ID
+        productID++;
+        product = new Product(productID);
+
+        //Input product info
+        System.out.print("Enter product name: ");
+        product.setProductName(input.nextLine());
+
+        System.out.print("Enter product price: ");
+        product.setProductPrice(input.nextDouble());
+        input.nextLine();
+
+        System.out.print("Enter product stock: ");
+        product.setProductStock(input.nextInt());
+        input.nextLine();
+
+        System.out.print("Enter product description: ");
+        product.setProductDescription(input.nextLine());
+
+        //Store product to product list
+        productList.add(product);
+
+        //Transfer product list to catalogue
+        catalogue.addProduct(productList);
+        System.out.println("\n[Product added to catalogue]");
+
+    }
+
+    public void sellerMenu() {
+        boolean exitSellerMenu = false;
+
+        while (!exitSellerMenu) {
+            System.out.println("\n===== SELLER MENU =====");
+            System.out.println("1. View Catalogue");
+            System.out.println("2. Add Product");
+            System.out.println("3. Display Account");
+            System.out.println("4. Update Account Info");
+            System.out.println("5. Logout");
+            System.out.println("6. Exit");
+            System.out.print("Enter choice: ");
+
+            try {
+                int choice = input.nextInt();
+                input.nextLine(); // Consume newline
+
+                switch (choice) {
+                    case 1:
+                        viewCatalogue();
+                        break;
+                    case 2:
+                        addProduct();
+                        break;
+                    case 3:
+                        displayAccount();
+                        break;
+                    case 4:
+                        updateAccountInfo();
+                        break;
+                    case 5:
+                        exitSellerMenu = true;
+                        break;
+                    case 6:
+                        System.exit(0);
+                    default:
+                        System.out.println("[Invalid choice, please try again.]");
+                }
+            } catch (Exception e) {
+                System.out.println("[Invalid input. Please enter a valid number.]");
+                input.nextLine(); // Clear invalid input
+            }
+        }
+    }
+
+
+    //To view catalogue
+    public void viewCatalogue(){
+        boolean exitCatalogueMenu = false;
+
+        while (!exitCatalogueMenu) {
+            System.out.println("\n===== SELLER CATALOGUE MENU =====");
+            System.out.println("1. View Catalogue");
+            System.out.println("2. Check Catalogue (Search Product by ID)");
+            System.out.println("3. Update Catalogue Item");
+            System.out.println("4. Remove Catalogue Item");
+            System.out.println("5. Back to Seller Menu");
+            System.out.print("Enter choice: ");
+
+            try {
+                int choice = input.nextInt();
+                switch (choice) {
+                    case 1:
+                        catalogue.viewCatalogue();
+                        break;
+                    case 2:
+                        System.out.print("Enter Product ID to check: ");
+                        int checkProductID = input.nextInt();
+                        input.nextLine();
+                        if (catalogue.checkCatalogue(checkProductID)) {
+                            System.out.println("[Product exists in the catalogue]");
+                        } else {
+                            System.out.println("[Product does not exist]");
+                        }
+                        break;
+                    case 3:
+                        catalogue.updateCatalogueItem();
+                        break;
+                    case 4:
+                        catalogue.removeCatalogueItem();
+                        break;
+                    case 5:
+                        exitCatalogueMenu = true;
+                        break;
+                    default:
+                        System.out.println("Invalid choice, please try again.");
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid input. Please enter a number.");
+            }
+        }
+    }
+}
+
+
+
+class Catalogue {
+    private ArrayList<Product> productList = new ArrayList<>();
+    Scanner input = new Scanner(System.in);
+
+    //Transfers the passed productList to the productList in the catalogue
+    public void addProduct(ArrayList <Product> productList){
+        this.productList = productList;
+    }
+
+    //Displays catalogue, if empty, displays is empty
+    public void viewCatalogue(){
+        System.out.println("\nCATALOGUE: ");
+
+        if (!productList.isEmpty()) {
+            for (Product product : productList) {
+                product.displayProduct();
+
+            }
+        } else {
+            System.out.println("[Catalogue is empty]");
+
+        }
+    }
+
+    //Checks if the product exists in the catalogue, then returns a boolean
+    public boolean checkCatalogue(int checkProductID){
+
+        boolean productExist = false;
+
+        for (Product product : productList) {
+            if (product.getProductID() == checkProductID){
+                productExist = true;
+            }
+
+        }
+
+        return productExist;
+    }
+
+    //Checks if the product exists in the catalogue. If true, returns the product
+    public Product returnProduct(int checkProductID){
+
+        Product productToReturn = null;
+
+        for (Product product : productList) {
+            if (product.getProductID() == checkProductID){
+                productToReturn = product;
+            }
+
+        }
+        return productToReturn;
+    }
+
+    //Removes product from catalogue
+    public void removeCatalogueItem (){
+        //Display catalogue
+        viewCatalogue();
+
+        boolean productExist = false;
+        int productToRemove;
+
+        //Prompt to enter product ID of product to remove
+        System.out.println("REMOVE PRODUCT");
+        System.out.print("Enter product ID: ");
+        productToRemove = input.nextInt();
+        input.nextLine();
+
+        Iterator<Product> iter = productList.iterator();
+
+        //Traverse product list
+        while(iter.hasNext()){
+            Product product = iter.next();
+
+            //If product exist, remove product
+            if (product.getProductID() == productToRemove){
+                productExist = true;
+
+                iter.remove();
+                System.out.println("\n[Product removed]");
+
+            }
+        }
+
+        //Else display order does not exist
+        if (!productExist){
+            System.out.println("\n[Product does not exist]\n");
+        }
+
+    }
+
+    public void updateCatalogueItem(){
+        int productToModify;
+        boolean productExist = false;
+
+        //Display catalogue
+        viewCatalogue();
+
+
+
+        while (!productExist) {
+            //Display prompt to enter product ID of product to modify
+            System.out.println("UPDATE PRODUCT");
+            System.out.print("Enter product ID: ");
+            productToModify = input.nextInt();
+            input.nextLine();
+
+            //Traverse product list to check if product exist
+            for (Product product : productList) {
+                boolean confirm = false;
+
+
+                    //If product exist, enter new product details
+                    if (productToModify == product.getProductID()) {
+
+
+                        while (!confirm) {
+                            System.out.println("\nPRODUCT");
+                            product.displayProduct();
+
+
+                            productExist = true;
+
+
+                            System.out.print("Enter new name: ");
+                            product.setProductName(input.nextLine());
+
+
+                            System.out.print("Enter new price: ");
+                            product.setProductPrice(input.nextDouble());
+                            input.nextLine();
+
+                            System.out.print("Enter new stock: ");
+                            product.setProductStock(input.nextInt());
+                            input.nextLine();
+
+                            System.out.print("Enter new description: ");
+                            product.setProductDescription(input.nextLine());
+
+                            System.out.println("\nUPDATED PRODUCT");
+                            product.displayProduct();
+
+                            System.out.print("Confirm [Y/N]: ");
+                            String confirmChoice = input.nextLine();
+
+                            if (confirmChoice.equalsIgnoreCase("Y")){
+                                confirm = true;
+                                System.out.println("\n[Product updated]");
+                            }
+
+                    }
+
+
+
+                }
+
+                if (!productExist) {
+                    System.out.println("[Product does not exist]\n");
+
+                }
+
+            }
+        }
+
+    }
+}
+
+class Product  {
+
+    private String productName;
+    private double productPrice;
+    private String productDescription;
+    private int productStock;
+    private int productID;
+
+
+    Product (int productID){
+        this.productID = productID;
+        this.productName = "";
+        this.productPrice = 0.0;
+        this.productDescription = "";
+        this.productStock = 0;
+    }
+
+
+
+    public void displayProduct(){
+        System.out.println("Product ID: " + productID);
+        System.out.println("Name: " + productName);
+        System.out.println("Price: ₱" + productPrice);
+        System.out.println("Description: " + productDescription);
+        System.out.println("Stock: " + productStock + "\n");
+
+    }
+
+
+    public int getProductID() {
+        return productID;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public void setProductPrice(double productPrice) {
+        this.productPrice = productPrice;
+    }
+
+    public double getProductPrice() {
+        return productPrice;
+    }
+
+    public void setProductStock(int productStock) {
+        this.productStock = productStock;
+    }
+
+    public int getProductStock() {
+        return productStock;
+    }
+
+    public void setProductDescription(String productDescription) {
+        this.productDescription = productDescription;
+    }
+
+    public String getProductDescription() {
+        return productDescription;
+    }
+}
+
+class Order {
+    private String productName;
+    private String productDescription;
+    private double productPrice;
+    private int orderID = 0;
+
+
+    Order(Product product, int orderID){
+        this.productName = product.getProductName();
+        this.productDescription = product.getProductDescription();
+        this.productPrice = product.getProductPrice();
+        this.orderID = orderID;
+    }
+
+    public void displayOrderDetails(){
+        System.out.println("Order ID: " + orderID);
+        System.out.println("Product name: " + productName);
+        System.out.println("Price: ₱" + productPrice);
+        System.out.println("Description: " + productDescription + "\n");
+
+    }
+
+    public int getOrderID() {
+        return orderID;
+    }
+
+    public double getProductPrice() {
+        return productPrice;
+    }
+}
+
+
+class ShoppingCart {
+    private int cartID;
+
+    private ArrayList<Order> orderList = new ArrayList<>();
+
+    Payment payment;
+
+
+    //Transfers passed order list to order list in the shopping cart
+    public void addCartItem(ArrayList<Order> orderList) {
+        this.orderList = orderList;
+
+    }
+
+    //Display shopping cart
+    public void viewCart() {
+
+        System.out.println("\nSHOPPING CART: ");
+
+        if (!orderList.isEmpty()) {
+            for (Order order : orderList) {
+                order.displayOrderDetails();
+            }
+        } else {
+            System.out.println("[Shopping cart is empty]");
+        }
+    }
+
+    //Removes order from shopping cart
+    public void removeCartItem (){
+        Scanner input = new Scanner(System.in);
+
+        boolean orderExist = false;
+        int orderToRemove;
+
+        System.out.println("REMOVE ORDER");
+        System.out.print("Enter order ID: ");
+        orderToRemove = input.nextInt();
+        input.nextLine();
+
+        Iterator <Order> iter = orderList.iterator();
+
+        while(iter.hasNext()){
+            Order order = iter.next();
+
+            if (order.getOrderID() == orderToRemove){
+                orderExist = true;
+
+                iter.remove();
+                System.out.println("\n[Order removed]");
+
+            }
+        }
+
+        if (!orderExist){
+            System.out.println("\n[Order does not exist]");
+        }
+        scanner.close();
+    }
+
+    public void checkOut(){
+
+        if (!orderList.isEmpty()) {
+
+            Scanner input = new Scanner(System.in);
+
+            payment = new Payment();
+            boolean confirm = false;
+
+            while(!confirm) {
+                System.out.println("\nCHECK OUT\n");
+
+
+                //Display orders
+                for (Order order : orderList) {
+                    order.displayOrderDetails();
+                }
+
+                //Display total
+                payment.calcTotal(orderList);
+
+                //Choose payment method
+                payment.choosePayment();
+
+                //Get user address
+                payment.takeAddress();
+
+
+
+                //Confirm payment
+
+                System.out.println("\nShipping address: " + payment.getShippingAddress());
+                System.out.println("Payment method: " + payment.getPaymentMethod());
+
+                System.out.print("\nConfirm [Y/N]: ");
+                String choice = input.nextLine();
+
+                if (choice.equalsIgnoreCase("Y")){
+                    confirm = true;
+                    System.out.println("\n[Checkout complete]");
+                }
+            }
+
+        } else {
+            System.out.println("[Shopping cart is empty]");
+        }
+        scanner.close();
+    }
+}
+
+
+class Payment {
+    Scanner input = new Scanner(System.in);
+
+    private double subtotal;
+    private double total;
+    private double shippingFee;
+    private String shippingAddress;
+    private String paymentMethod;
+
+
+    Payment (){
+        subtotal = 0.0;
+        total = 0.0;
+        shippingFee = 100.0;
+    }
+
+
+
+
+    public void calcTotal (ArrayList<Order> orderList){
+        //Calculate subtotal
+        for (Order order : orderList){
+            subtotal += order.getProductPrice();
+        }
+
+        total = subtotal + shippingFee;
+
+        System.out.println("Payment Details");
+        System.out.println("Subtotal: ₱" + subtotal);
+        System.out.println("Shipping fee: ₱" + shippingFee);
+        System.out.println("Total: ₱" + total);
+    }
+
+    public void choosePayment(){
+
+        System.out.println("\nPayment Methods");
+        System.out.println("1. Cash on Delivery");
+        System.out.println("2. Debit Card/Credit Card");
+        System.out.println("3. Gcash");
+
+        System.out.print("\nChoice: ");
+        int choice = input.nextInt();
+        input.nextLine();
+
+        switch (choice){
+
+            case 1:
+                paymentMethod = "Cash on Delivery";
+
+                break;
+            case 2:
+                paymentMethod = "Debit Card/Credit Card";
+                break;
+
+            case 3:
+                paymentMethod = "Gcash";
+                break;
+
+            default:
+                System.out.println("Invalid input.");
+
+        }
+
+    }
+
+    public void takeAddress(){
+        System.out.print("\nEnter shipping address: ");
+        shippingAddress = input.nextLine();
+    }
+
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public String getShippingAddress() {
+        return shippingAddress;
+    }
+}
+
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+        boolean exitSystem = false;
+
+        while (!exitSystem) {
+            System.out.println("===== LOGIN =====");
+            System.out.print("Enter Email: ");
+            String email = input.nextLine();
+            System.out.print("Enter Password: ");
+            String password = input.nextLine();
+
+            boolean isLoggedIn = true;
+
+            if (isLoggedIn) {
+                boolean exitRoleSelection = false;
+
+                while (!exitRoleSelection) {
+                    System.out.println("\n===== SELECT ROLE =====");
+                    System.out.println("1. Seller");
+                    System.out.println("2. Customer");
+                    System.out.println("3. Exit");
+                    System.out.print("Enter choice: ");
+                    try {
+                        int role = input.nextInt();
+                        input.nextLine();
+                        switch (role) {
+                            case 1:
+                                Seller seller = createSeller(input, email, password);
+                                seller.sellerMenu();
+                                exitRoleSelection = true;
+                                break;
+                            case 2:
+                                Customer customer = createCustomer(input, email, password);
+                                customer.customerMenu();
+                                exitRoleSelection = true;
+                                break;
+                            case 3:
+                                exitRoleSelection = true;
+                                exitSystem = true;
+                                break;
+                            default:
+                                System.out.println("Invalid choice, please try again.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid input. Please enter a number.");
+                    }
+                }
+            } else {
+                System.out.println("[Login failed. Please try again.]");
+            }
+        }
+        input.close();
+        System.out.println("System exited. Thank you for using the program!");
+    }
+
+
+    
+    public static Seller createSeller(Scanner input, String email, String password) {
+        System.out.println("\n=== ENTER SELLER INFO ===");
+        System.out.print("Enter Name: ");
+        String name = input.nextLine();
+        System.out.print("Enter Address: ");
+        String address = input.nextLine();
+        System.out.print("Enter Phone Number: ");
+        String phoneNumber = input.nextLine();
+    
+        Seller seller = new Seller();
+        seller.name = name;
+        seller.email = email;
+        seller.password = password;
+        seller.address = address;
+        seller.phoneNumber = phoneNumber;
+    
+        return seller;
+    }
+    
+    public static Customer createCustomer(Scanner input, String email, String password) {
+        System.out.println("\n=== ENTER CUSTOMER INFO ===");
+        System.out.print("Enter Name: ");
+        String name = input.nextLine();
+        System.out.print("Enter Address: ");
+        String address = input.nextLine();
+        System.out.print("Enter Phone Number: ");
+        String phoneNumber = input.nextLine();
+    
+        Customer customer = new Customer();
+        customer.name = name;
+        customer.email = email;
+        customer.password = password;
+        customer.address = address;
+        customer.phoneNumber = phoneNumber;
+    
+        return customer;
+    }
+}
