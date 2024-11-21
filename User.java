@@ -21,7 +21,7 @@ public abstract class User {
         System.out.print("Phone Number: ");
         this.phoneNumber = input.nextLine();
         
-        System.out.println("\n YOUR INFO");
+        System.out.println("\n    YOUR INFO");
         System.out.println("Name         : " + name);
         System.out.println("Email        : " + email);
         System.out.println("Address      : " + address);
