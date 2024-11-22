@@ -5,6 +5,8 @@
 - needs to stop prompting for user info if they already filled-out once (pag nag choose role ulit kasi magpprompt ulit siya) (fixed)
 - email and password being shared by the customer and seller (not sure about this one tbh, siguro instead na may option to go back sa role selection is maglogout na lang altogether) (fixed)
 - 'di pa talaga maayos, pina-run ko lang muna para makuha yung flow ng program and macheck if working yung logic. check niyo na lang din.
+
+
  */
 
 import java.util.Scanner;
@@ -127,35 +129,48 @@ class Customer extends User  {
 
         while (!exitCustomerMenu) {
             System.out.println("\n===== CUSTOMER MENU =====");
-            System.out.println("1. View Shopping Cart");
-            System.out.println("2. Place Order");
-            System.out.println("3. Display Account");
-            System.out.println("4. Update Account Info");
-            System.out.println("5. Logout");
-            System.out.println("6. Exit");
-            System.out.print("Enter choice: ");
+            System.out.println("1. View Catalogue");
+            System.out.println("2. View Shopping Cart");
+            System.out.println("3. Place Order");
+            System.out.println("4. Display Account");
+            System.out.println("5. Update Account Info");
+            System.out.println("6. Logout");
+            System.out.println("7. Exit");
+
+            System.out.print("\nEnter choice: ");
 
             try {
                 int choice = input.nextInt();
 
                 switch (choice) {
+
                     case 1:
+                        viewCatalogue();
+                        break;
+
+                    case 2:
                         viewShoppingCart();
                         break;
-                    case 2:
+                        
+                    case 3:
                         placeOrder();
                         break;
-                    case 3:
+
+                    case 4:
                         displayAccount();
                         break;
-                    case 4:
+
+                    case 5:
                         updateAccountInfo();
                         break;
-                    case 5:
+
+                    case 6:
                         exitCustomerMenu = true;
                         break;
-                    case 6:
+
+                    case 7:
                         System.exit(0);
+
                     default:
                         System.out.println("[Invalid choice, please try again.]");
                 }
@@ -175,7 +190,7 @@ class Customer extends User  {
             System.out.println("2. Remove Cart Item");
             System.out.println("3. Checkout");
             System.out.println("4. Back to Customer Menu");
-            System.out.print("Enter choice: ");
+            System.out.print("\nEnter choice: ");
 
             try {
                 int choice = input.nextInt();
@@ -230,6 +245,7 @@ class Seller extends User  {
         product = new Product(productID);
 
         //Input product info
+        System.out.print("\nADD PRODUCT");
         System.out.print("Enter product name: ");
         product.setProductName(input.nextLine());
 
@@ -264,7 +280,7 @@ class Seller extends User  {
             System.out.println("4. Update Account Info");
             System.out.println("5. Logout");
             System.out.println("6. Exit");
-            System.out.print("Enter choice: ");
+            System.out.print("\nEnter choice: ");
 
             try {
                 int choice = input.nextInt();
@@ -310,7 +326,7 @@ class Seller extends User  {
             System.out.println("3. Update Catalogue Item");
             System.out.println("4. Remove Catalogue Item");
             System.out.println("5. Back to Seller Menu");
-            System.out.print("Enter choice: ");
+            System.out.print("\nEnter choice: ");
 
             try {
                 int choice = input.nextInt();
@@ -460,43 +476,43 @@ class Catalogue {
                 boolean confirm = false;
 
 
-                    //If product exist, enter new product details
-                    if (productToModify == product.getProductID()) {
+                //If product exist, enter new product details
+                if (productToModify == product.getProductID()) {
 
 
-                        while (!confirm) {
-                            System.out.println("\nPRODUCT");
-                            product.displayProduct();
+                    while (!confirm) {
+                        System.out.println("\nPRODUCT");
+                        product.displayProduct();
 
 
-                            productExist = true;
+                        productExist = true;
 
 
-                            System.out.print("Enter new name: ");
-                            product.setProductName(input.nextLine());
+                        System.out.print("Enter new name: ");
+                        product.setProductName(input.nextLine());
 
 
-                            System.out.print("Enter new price: ");
-                            product.setProductPrice(input.nextDouble());
-                            input.nextLine();
+                        System.out.print("Enter new price: ");
+                        product.setProductPrice(input.nextDouble());
+                        input.nextLine();
 
-                            System.out.print("Enter new stock: ");
-                            product.setProductStock(input.nextInt());
-                            input.nextLine();
+                        System.out.print("Enter new stock: ");
+                        product.setProductStock(input.nextInt());
+                        input.nextLine();
 
-                            System.out.print("Enter new description: ");
-                            product.setProductDescription(input.nextLine());
+                        System.out.print("Enter new description: ");
+                        product.setProductDescription(input.nextLine());
 
-                            System.out.println("\nUPDATED PRODUCT");
-                            product.displayProduct();
+                        System.out.println("\nUPDATED PRODUCT");
+                        product.displayProduct();
 
-                            System.out.print("Confirm [Y/N]: ");
-                            String confirmChoice = input.nextLine();
+                        System.out.print("Confirm [Y/N]: ");
+                        String confirmChoice = input.nextLine();
 
-                            if (confirmChoice.equalsIgnoreCase("Y")){
-                                confirm = true;
-                                System.out.println("\n[Product updated]");
-                            }
+                        if (confirmChoice.equalsIgnoreCase("Y")){
+                            confirm = true;
+                            System.out.println("\n[Product updated]");
+                        }
 
                     }
 
@@ -670,7 +686,7 @@ class ShoppingCart {
         if (!orderExist){
             System.out.println("\n[Order does not exist]");
         }
-        scanner.close();
+        input.close();
     }
 
     public void checkOut(){
@@ -716,10 +732,12 @@ class ShoppingCart {
                 }
             }
 
+            input.close();
+
         } else {
             System.out.println("[Shopping cart is empty]");
         }
-        scanner.close();
+
     }
 }
 
@@ -811,10 +829,10 @@ public class Main {
         boolean exitSystem = false;
 
         while (!exitSystem) {
-            System.out.println("===== LOGIN =====");
-            System.out.print("Enter Email: ");
+            System.out.println("\n===== LOGIN =====");
+            System.out.print("Enter email: ");
             String email = input.nextLine();
-            System.out.print("Enter Password: ");
+            System.out.print("Enter password: ");
             String password = input.nextLine();
 
             boolean isLoggedIn = true;
@@ -827,7 +845,7 @@ public class Main {
                     System.out.println("1. Seller");
                     System.out.println("2. Customer");
                     System.out.println("3. Exit");
-                    System.out.print("Enter choice: ");
+                    System.out.print("\nEnter choice: ");
                     try {
                         int role = input.nextInt();
                         input.nextLine();
@@ -862,7 +880,7 @@ public class Main {
     }
 
 
-    
+
     public static Seller createSeller(Scanner input, String email, String password) {
         System.out.println("\n=== ENTER SELLER INFO ===");
         System.out.print("Enter Name: ");
@@ -871,17 +889,17 @@ public class Main {
         String address = input.nextLine();
         System.out.print("Enter Phone Number: ");
         String phoneNumber = input.nextLine();
-    
+
         Seller seller = new Seller();
         seller.name = name;
         seller.email = email;
         seller.password = password;
         seller.address = address;
         seller.phoneNumber = phoneNumber;
-    
+
         return seller;
     }
-    
+
     public static Customer createCustomer(Scanner input, String email, String password) {
         System.out.println("\n=== ENTER CUSTOMER INFO ===");
         System.out.print("Enter Name: ");
@@ -890,14 +908,14 @@ public class Main {
         String address = input.nextLine();
         System.out.print("Enter Phone Number: ");
         String phoneNumber = input.nextLine();
-    
+
         Customer customer = new Customer();
         customer.name = name;
         customer.email = email;
         customer.password = password;
         customer.address = address;
         customer.phoneNumber = phoneNumber;
-    
+
         return customer;
     }
 }
