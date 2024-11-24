@@ -881,7 +881,7 @@
              input.nextLine(); //Added pause for dramatic effect
  
              boolean isLoggedIn = true;
-             cls();
+             User.clear();
  
              if (isLoggedIn) {
                  boolean exitRoleSelection = false;
@@ -898,13 +898,13 @@
                          input.nextLine();
                          switch (role) {
                              case 1:
-                                 cls();
+                                 User.clear();
                                  Seller seller = createSeller(input, email, password);
                                  seller.sellerMenu();
                                  exitRoleSelection = true;
                                  break;
                              case 2:
-                                 cls();
+                                 User.clear();
                                  Customer customer = createCustomer(input, email, password);
                                  customer.customerMenu();
                                  exitRoleSelection = true;
@@ -968,10 +968,5 @@
          customer.phoneNumber = phoneNumber;
      
          return customer;
-     }
- 
-     public static void cls(){
-         System.out.print("\033[H\033[2J");
-         System.out.flush();
      }
  }
