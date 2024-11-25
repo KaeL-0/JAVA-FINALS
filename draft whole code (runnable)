@@ -932,7 +932,7 @@
  
      
      public static Seller createSeller(Scanner input, String email, String password) {
-         System.out.println("\n======== ENTER SELLER INFO ========");
+         System.out.println("\n======== ENTER SELLER INFO ======== \n");
          System.out.print("Enter Name: ");
          String name = input.nextLine();
          System.out.print("Enter Address: ");
@@ -951,8 +951,7 @@
      }
      
      public static Customer createCustomer(Scanner input, String email, String password) {
-         System.out.println("\n======== ENTER CUSTOMER INFO ========");
-         System.out.println();
+         System.out.println("\n======== ENTER CUSTOMER INFO ======== \n");
          System.out.print("Enter Name: ");
          String name = input.nextLine();
          System.out.print("Enter Address: ");
