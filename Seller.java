@@ -142,16 +142,22 @@ class Seller extends User  {
                     case 3:
                         clear();
                         System.out.println("\n\n===== SEARCH PRODUCT =====");
-                        System.out.print("Enter Product ID to check: ");
-                        int checkProductID = input.nextInt();
-                        input.nextLine();
-                        if (catalogue.checkCatalogue(checkProductID)) {
-                            System.out.println("\n[Product exists in the catalogue]");
+
+                        if(!productList.isEmpty()) {
+                            System.out.print("Enter Product ID to check: ");
+                            int checkProductID = input.nextInt();
+                            input.nextLine();
+                            if (catalogue.checkCatalogue(checkProductID)) {
+                                System.out.println("\n[Product exists in the catalogue]");
+                            } else {
+                                System.out.println("\n[Product does not exist]");
+                            }
+                            System.out.println();
+                            pause();
+
                         } else {
-                            System.out.println("\n[Product does not exist]");
+                            System.out.println("[Catalogue is empty]");
                         }
-                        System.out.println();
-                        pause();
                         break;
                     case 4:
                         clear();
