@@ -124,7 +124,7 @@ class Catalogue {
 
 
                             while (!confirm) {
-                                System.out.println("\nPRODUCT LIST\n");
+                                System.out.println("\nPRODUCT TO UPDATE\n");
                                 product.displayProduct();
 
 
@@ -160,14 +160,21 @@ class Catalogue {
                             }
 
 
-                        }
+                        } else {
 
-                        if (!productExist) {
                             System.out.println("[Product does not exist]\n");
-
                         }
+
+
+
+
 
                     }
+                }
+
+                if (!productExist) {
+                    System.out.println("[Product does not exist]\n");
+
                 }
             }
         }
