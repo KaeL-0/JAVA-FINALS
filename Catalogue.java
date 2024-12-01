@@ -124,14 +124,14 @@ class Catalogue {
 
 
                             while (!confirm) {
-                                System.out.println("\nPRODUCT\n");
+                                System.out.println("\nPRODUCT LIST\n");
                                 product.displayProduct();
 
 
                                 productExist = true;
 
 
-                                System.out.print("Enter new name: ");
+                                System.out.print("\nEnter new name: ");
                                 product.setProductName(input.nextLine());
 
 
