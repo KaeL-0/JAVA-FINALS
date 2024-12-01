@@ -147,8 +147,17 @@ class Seller extends User  {
                             System.out.print("Enter Product ID to check: ");
                             int checkProductID = input.nextInt();
                             input.nextLine();
+
+
+
                             if (catalogue.checkCatalogue(checkProductID)) {
-                                System.out.println("\n[Product exists in the catalogue]");
+                                System.out.println("\n[Product exists in the catalogue]\n");
+
+                                Product returnProduct = new Product(checkProductID);
+                                returnProduct = catalogue.returnProduct(checkProductID);
+                                returnProduct.displayProduct();
+
+
                             } else {
                                 System.out.println("\n[Product does not exist]");
                             }
